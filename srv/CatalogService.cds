@@ -13,6 +13,18 @@ service CatalogService @(path:'CatalogService') {
     entity PurchaseOrderItems as projection on db.transaction.poitems;
     entity POs as projection on db.transaction.purchaseorder{
         *,
+        case OVERALL_STATUS
+            when 'N' then 'New'
+            when 'B' then 'Blocked'
+            when 'D' then 'Delivered'
+            when 'P' then 'Planned'
+        end as OVERALL_STATUS: String(20),
+        case OVERALL_STATUS
+            when 'N' then 2
+            when 'B' then 1
+            when 'D' then 3
+            when 'P' then 3
+            end as Crtiticality: Integer,
         round(GROSS_AMOUNT) as GROSS_AMOUNT: Decimal(10,2),
         Items: redirected to PurchaseOrderItems
     }

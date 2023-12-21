@@ -13,6 +13,7 @@ context master {
         FAX_NUMBER: String(32);
         WEB_ADDRESS: String(44);
         ADDRESS_GUID: Association to address;
+        @readonly
         BP_ID: String(32);
         COMPANY_NAME: String(250);
     }
@@ -71,18 +72,18 @@ context master {
 }
 
 context transaction {
-    entity purchaseorder: common.Amount{
-        key NODE_KEY: common.Guid;
+    entity purchaseorder: cuid, common.Amount{
+        // key NODE_KEY: common.Guid;
         PO_ID: String(40);
         PARTNER_GUID: Association to master.businesspartner;
         LIFECYCLE_STATUS: String(1);
         OVERALL_STATUS: String(1);
         NOTE:String(45) default 'null';
-        Items: Association to many poitems on Items.PARENT_KEY = $self;
+        Items: Composition of many poitems on Items.PARENT_KEY = $self;
     }
 
-    entity poitems: common.Amount{
-        key NODE_KEY: common.Guid;
+    entity poitems: cuid,common.Amount{
+        // key NODE_KEY: common.Guid;
         PARENT_KEY: Association to purchaseorder;
         PO_ITEM_POS: Integer;
         PRODUCT_GUID: Association to master.product;

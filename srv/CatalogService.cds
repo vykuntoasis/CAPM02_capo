@@ -11,8 +11,11 @@ service CatalogService @(path:'CatalogService') {
     @readonly
     entity EmployeeSet as projection on db.master.employees;
     entity PurchaseOrderItems as projection on db.transaction.poitems;
-    entity POs as projection on db.transaction.purchaseorder{
+    entity POs @( title: 'Purchase order', odata.draft.enabled:true
+                   )
+    as projection on db.transaction.purchaseorder{
         *,
+        @Common.Label : 'Over all status'
         case OVERALL_STATUS
             when 'N' then 'New'
             when 'B' then 'Blocked'
@@ -25,13 +28,15 @@ service CatalogService @(path:'CatalogService') {
             when 'D' then 3
             when 'P' then 3
             end as Crtiticality: Integer,
-        round(GROSS_AMOUNT) as GROSS_AMOUNT: Decimal(10,2),
+        // @Common.Label : 'Gross amount'    
+        // round(GROSS_AMOUNT) as GROSS_AMOUNT: Decimal(10,2),
         Items: redirected to PurchaseOrderItems
     }
     actions{
         action boost();
         function largestOrder() returns array of POs;
-}
+} 
+   entity productSet as projection on db.master.product
     // entity CProductValuesView as projection on cds.CDSViews.CProductValuesView;
 
  }

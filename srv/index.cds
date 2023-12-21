@@ -7,9 +7,13 @@ annotate master.businesspartner with {
 };
 
 annotate master.product with {
-        NODE_KEY @title: '{i18n>product_key}';
-        PRODUCT_ID @title: '{i18n>product_guid}';
+        NODE_KEY @title: '{i18n>product_node_key}';
+        PRODUCT_ID @title: '{i18n>product_id}';
         DESCRIPTION @title: '{i18n>name}';
+};
+
+annotate master.address with {
+        COUNTRY @title : '{i18n>country}'
 };
 
 annotate transaction.purchaseorder with {
